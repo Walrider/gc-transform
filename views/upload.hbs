@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+{{> head}}
+<body>
+<div class="container ">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            {{> header}}
+            <form id='uploadForm'
+                  action='/'
+                  method='post'
+                  encType="multipart/form-data">
+                <div class="form-group">
+                    <label for="eventsFile">CSV Events File</label>
+                    <input type="file" class="form-control-file" id="eventsFile" name="eventsFile">
+                    <small id="fileHelp" class="form-text text-muted">Please make sure you upload valid csv file with
+                        event list.
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
