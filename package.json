@@ -1,0 +1,14 @@
+{
+  "name": "gc-transform",
+  "version": "1.0.0",
+  "description": "Package that trasforms events data from state plane coordinate system to Google Map format",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.85.0"
+  }
+}
