@@ -3,7 +3,7 @@ This app accept CSV file with events data(location in spcs format, type and date
 Currently only Texas SPCS projection available. Feel free to add more to config file(proj4js format).
 
 For proper functioning of the app you need to have:
-1. Formatted CSV file to import
+1. Formatted CSV file to import(you can find test one in root of the project(events.csv))
 2. Google Developers Console API key
 
 Instructions:
