@@ -1,48 +1,44 @@
 let express = require('express');
 let router = express.Router();
 
-let fs = require('fs');
-let csv = require('fast-csv');
+const config = require('config');
+const tmpFileDestination = __dirname + config.get('eventsFile.tmpFileDestination');
 
-const tmpFileDestination = __dirname + '/../tmp/events.csv';
-
+//Render initial upload page
 router.get('/', (req, res) => {
-    res.render('upload.hbs', {
+    res.status(200).render('upload.hbs', {
         pageTitle: 'Upload CSV',
+        error: null,
     });
 });
 
+//Retrieve posted csv file
 router.post('/', (req, res) => {
+    //Validation
     if (!req.files || !req.files.eventsFile) {
-        return res.status(400).send('No files were uploaded.');
+        return res.status(400).render('upload.hbs', {
+            pageTitle: 'Upload CSV',
+            error: 'No files were uploaded',
+        });
     }
 
-    if (req.files.eventsFile.mimetype !== 'text/csv') {
-        return res.status(400).send('Wrong file extension.');
+    if (req.files.eventsFile.mimetype !== config.get('eventsFile.mimeType')) {
+        return res.status(400).render('upload.hbs', {
+            pageTitle: 'Upload CSV',
+            error: 'Wrong file extension.',
+        });
     }
 
-    let eventsFile = req.files.eventsFile;
-
-    eventsFile.mv(tmpFileDestination, function (err) {
+    //Move file to tmp folder
+    req.files.eventsFile.mv(tmpFileDestination, function (err) {
         if (err)
             return res.status(500).send(err);
     });
 
-    let eventsData = [];
-
-    csv
-        .fromPath(tmpFileDestination, {headers: true})
-        .on("data", function (data) {
-            console.log(data);
-            eventsData.push(data);
-        })
-        .on("end", function () {
-            JSON.stringify(eventsData);
-            fs.unlink(tmpFileDestination);
-            res.send(eventsData);
-        });
-
-    // res.render('map.hbs', {data: req});
+    //Render map with selectors
+    res.status(200).render('map.hbs', {
+        mapsConfig: config.get('googleMaps')
+    });
 });
 
 module.exports = router;

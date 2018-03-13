@@ -1,0 +1,104 @@
+<script>
+    let map;
+    let events;
+    let selectedDates;
+    let selectedTypes;
+
+    let getFilteredEvents = () => {
+        //Filter events by given type and date range and return
+        return events.filter((event) => {
+            let eventDate = new Date(event['Date1 of Occurrence']);
+            return eventDate > selectedDates[0] && eventDate < selectedDates[1];
+        }).filter((event) => selectedTypes.includes(event.TYPE));
+    };
+
+    let datepicker = $('#dates').datepicker({
+        onSelect: (formattedDate, date) => {
+            //Check if date range was selected
+            if (date.length === 2) {
+                //Filter and redraw
+                selectedDates = date;
+                drawMap(getFilteredEvents());
+            }
+        }
+    }).data('datepicker');
+
+    $('#types').on('select2:select select2:unselect', function (e) {
+        //Filter and redraw
+        selectedTypes = $(this).select2('data').map(type => type.text);
+        drawMap(getFilteredEvents());
+    });
+
+
+    //Get events data init filters and draw map
+    $.get("/api/events", function (data) {
+        events = data;
+        drawMap(data);
+        initTypeSelect(data);
+        initDatepicker(data);
+    });
+
+    function drawMap(eventsData) {
+        //Check if any events selected and define map center
+        let center = eventsData.length > 0 ?
+                {lat: eventsData[0].Lat, lng: eventsData[0].Lng} :
+                {lat: {{mapsConfig.defaultCenter.lat}}, lng: {{mapsConfig.defaultCenter.lng}} };
+
+        //Draw map
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: center,
+            zoom: {{mapsConfig.zoom}}
+        });
+
+        if (eventsData.length > 0) {
+
+            //Init info windows
+            let infoWin = new google.maps.InfoWindow();
+
+
+            //Init markers
+            let markers = eventsData.map(function (location, i) {
+                let marker = new google.maps.Marker({
+                    position: {lat: eventsData[i].Lat, lng: eventsData[i].Lng},
+                    label: eventsData[i]['TYPE']
+                });
+                google.maps.event.addListener(marker, 'mouseover', function (evt) {
+                    infoWin.setContent(`Event of Type '${eventsData[i]['TYPE']}' taking plane on '${eventsData[i]['Date1 of Occurrence']}'`);
+                    infoWin.open(map, marker);
+                });
+                return marker;
+            });
+
+            //Draw markers clusters
+            let markerCluster = new MarkerClusterer(map, markers,
+                    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        }
+    }
+
+    let initTypeSelect = (eventsData) => {
+        //Get event types and select all
+        selectedTypes = eventsData
+                .map(event => event.TYPE)
+                .filter((type, i, arr) => arr.indexOf(type) == i)
+                .sort();
+
+        //Format options for select
+        let types = selectedTypes.map((type, index) => {
+            return {
+                id: index,
+                text: type,
+                selected: true
+            };
+        });
+
+        $('#types').select2({data: types});
+    };
+
+    let initDatepicker = (eventsData) => {
+        //Get event dates and populate date filter based on given data
+        let dates = eventsData.map(event => new Date(event['Date1 of Occurrence']));
+        let minDate = new Date(Math.min.apply(null, dates));
+        let maxDate = new Date(Math.max.apply(null, dates));
+        datepicker.selectDate([minDate, maxDate]);
+    };
+</script>

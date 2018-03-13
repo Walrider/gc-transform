@@ -1,0 +1,27 @@
+{
+  "server": {
+    "port": "3000"
+  },
+  "eventsFile": {
+    "mimeType": "text/csv",
+    "tmpFileDestination": "/../tmp/events.csv",
+    "requiredFields": [
+      "X Coordinate",
+      "Y Coordinate",
+      "Date1 of Occurrence",
+      "TYPE"
+    ]
+  },
+  "projections": {
+    "TX": "+proj=lcc +lat_1=32.13333333333333 +lat_2=33.96666666666667 +lat_0=31.66666666666667 +lon_0=-98.5 +x_0=600000.0000000001 +y_0=2000000 +datum=NAD83 +units=us-ft +no_defs",
+    "latLong": "EPSG:4326"
+  },
+  "googleMaps": {
+    "APIKEY": "ENTER YOUR API KEY HERE",
+    "zoom": 10,
+    "defaultCenter": {
+      "lat": 32.7775507,
+      "lng": -96.8010691
+    }
+  }
+}

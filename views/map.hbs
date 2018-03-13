@@ -2,12 +2,33 @@
 <html>
 {{> head}}
 <body>
-<div class="container ">
+<br>
+<div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            {{> header}}
+        <div class="col-md-4">
+            <a href="/" class="btn btn-primary"><- Back To Upload Page</a>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="dates">Select events date range</label>
+                <input name="dates" id="dates" type="text" data-range="true" data-date-format="m/d/yy"
+                       data-multiple-dates-separator=" - " class="datepicker-here form-control"/>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="types">Select Event Type</label>
+                <select class="form-control" id="types" name="types" multiple="multiple">
+
+                </select>
+            </div>
         </div>
     </div>
 </div>
+<br>
+<div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key={{mapsConfig.APIKEY}}"></script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+{{> mainScript}}
 </body>
 </html>

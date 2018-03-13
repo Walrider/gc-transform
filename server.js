@@ -2,29 +2,27 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const hbs = require('hbs');
 const fs = require('fs');
+const config = require('config');
 
 let app = express();
 
+//Enable fileUpload for CSV import
 app.use(fileUpload());
 
 //require routes files
 let webRoutes = require('./routes/web');
 let apiRoutes = require('./routes/api');
 
-//register partials and helpers
+//Register partials and helpers
 hbs.registerPartials(__dirname + '/views/partials');
 
-hbs.registerHelper('getCurrentYear', () => {
-    return new Date().getFullYear();
-});
-
-//set view engine
+//Set view engine and static files
 app.set('views', (__dirname + '/views'));
 app.set('view engine', 'hbs');
 
 app.use(express.static(__dirname + '/public'));
 
-//set logging
+//Set logging
 app.use((req, res, next) => {
     let now = new Date().toString();
     let log = `${now}: ${req.method} ${req.url}`;
@@ -38,10 +36,11 @@ app.use((req, res, next) => {
     next();
 });
 
-//init routes
+//Init routes
 app.use('/api', apiRoutes);
 app.use('/', webRoutes);
 
-app.listen(3000, () => {
-    console.log('Server is up on port 3000');
+//Fire up server
+app.listen(config.get('server.port'), () => {
+    console.log(`Server is up on port ${config.get('server.port')}`);
 });

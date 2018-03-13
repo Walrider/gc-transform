@@ -16,6 +16,11 @@
                     <small id="fileHelp" class="form-text text-muted">Please make sure you upload valid csv file with
                         event list.
                     </small>
+                    {{#if error}}
+                        <small class="text-danger">
+                            {{error}}
+                        </small>
+                    {{/if}}
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
