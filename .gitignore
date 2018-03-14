@@ -2,3 +2,6 @@ node_modules
 .idea
 *.log
 tmp/*
+npm-debug.log
+.DS_Store
+/*.env
