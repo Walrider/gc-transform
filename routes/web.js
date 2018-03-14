@@ -37,7 +37,8 @@ router.post('/', (req, res) => {
 
     //Render map with selectors
     res.status(200).render('map.hbs', {
-        mapsConfig: config.get('googleMaps')
+        mapsConfig: config.get('googleMaps'),
+        APIKey: config.util.getEnv('APIKey')
     });
 });
 

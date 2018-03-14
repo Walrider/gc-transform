@@ -17,7 +17,6 @@
     "latLong": "EPSG:4326"
   },
   "googleMaps": {
-    "APIKEY": "ENTER YOUR API KEY HERE",
     "zoom": 10,
     "defaultCenter": {
       "lat": 32.7775507,
