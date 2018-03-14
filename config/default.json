@@ -4,7 +4,8 @@
   },
   "eventsFile": {
     "mimeType": "text/csv",
-    "tmpFileDestination": "/../tmp/events.csv",
+    "tmpDir": "/tmp",
+    "tmpFileName": "/events.csv",
     "requiredFields": [
       "X Coordinate",
       "Y Coordinate",

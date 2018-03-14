@@ -1,8 +1,19 @@
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 
 const config = require('config');
-const tmpFileDestination = __dirname + config.get('eventsFile.tmpFileDestination');
+const tmpDir = path.dirname(require.main.filename) + config.get('eventsFile.tmpDir');
+const tmpFileLocation = tmpDir + config.get('eventsFile.tmpFileName');
+
+function checkDirectorySync(directory) {
+    try {
+        fs.statSync(directory);
+    } catch(e) {
+        fs.mkdirSync(directory);
+    }
+}
 
 //Render initial upload page
 router.get('/', (req, res) => {
@@ -30,9 +41,11 @@ router.post('/', (req, res) => {
     }
 
     //Move file to tmp folder
-    req.files.eventsFile.mv(tmpFileDestination, function (err) {
-        if (err)
+    checkDirectorySync(tmpDir);
+    req.files.eventsFile.mv(tmpFileLocation, function (err) {
+        if (err) {
             return res.status(500).send(err);
+        }
     });
 
     //Render map with selectors
