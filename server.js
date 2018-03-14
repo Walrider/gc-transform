@@ -41,6 +41,6 @@ app.use('/api', apiRoutes);
 app.use('/', webRoutes);
 
 //Fire up server
-app.listen(config.get('server.port'), () => {
-    console.log(`Server is up on port ${config.get('server.port')}`);
+app.listen(process.env.PORT || config.get('server.port'), () => {
+    console.log(`Server is up on port ${process.env.PORT || config.get('server.port')}`);
 });
